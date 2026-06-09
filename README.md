@@ -14,7 +14,7 @@ Built with a focus on UI, state management, and smooth user experience.
 ![Product](assets/images/screenshots/product_details.png)
 
 ### 🛍️ Product 
-![Product](assets/images/screenshots/product.png)
+![Product](assets/images/screenshots/product.png) 
 
 ### 🛒 Cart Screen
 ![Cart](assets/images/screenshots/cart.png)
