@@ -5,6 +5,28 @@ Built with a focus on UI, state management, and smooth user experience.
 
 ---
 
+## 📸 Screenshots
+
+### 🏠 Home Screen
+![Home](screenshots/home.png)
+
+### 🛍️ Product Details
+![Product](screenshots/product_details.png)
+
+### 🛒 Cart Screen
+![Cart](screenshots/cart.png)
+
+### ❤️ Wishlist
+![Wishlist](screenshots/wishlist.png)
+
+### 👤 Profile
+![Profile](screenshots/profile.png)
+
+### 🌗 Dark Mode
+![Dark Mode](screenshots/settings.png)
+
+---
+
 ## ✨ Features
 
 - 🏠 Home screen with product listing  
