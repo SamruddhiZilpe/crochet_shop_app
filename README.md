@@ -8,22 +8,25 @@ Built with a focus on UI, state management, and smooth user experience.
 ## 📸 Screenshots
 
 ### 🏠 Home Screen
-![Home](screenshots/home.png)
+![Home](assets/images/screenshots/home.png)
 
 ### 🛍️ Product Details
-![Product](screenshots/product_details.png)
+![Product](assets/images/screenshots/product_details.png)
+
+### 🛍️ Product 
+![Product](assets/images/screenshots/product.png)
 
 ### 🛒 Cart Screen
-![Cart](screenshots/cart.png)
+![Cart](assets/images/screenshots/cart.png)
 
 ### ❤️ Wishlist
-![Wishlist](screenshots/wishlist.png)
+![Wishlist](assets/images/screenshots/wishlist.png)
 
 ### 👤 Profile
-![Profile](screenshots/profile.png)
+![Profile](assets/images/screenshots/profile.png)
 
 ### 🌗 Dark Mode
-![Dark Mode](screenshots/settings.png)
+![Dark Mode](assets/images/screenshots/settings.png)
 
 ---
 
