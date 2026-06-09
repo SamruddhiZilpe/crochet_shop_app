@@ -73,6 +73,14 @@ flutter:
     - assets/images/logo/veemadeforyou.png
     - assets/images/banner/banner.png
     - assets/images/logo/launcher_logo.png
+    - assets/images/screenshots/home.png
+    - assets/images/screenshots/product_details.png
+    - assets/images/screenshots/products.png
+    - assets/images/screenshots/cart.png
+    - assets/images/screenshots/wishlist.png
+    - assets/images/screenshots/profile.png
+    - assets/images/screenshots/settings.png
+    - assets/images/screenshots/checkout.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
