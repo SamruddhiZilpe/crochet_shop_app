@@ -1,16 +1,35 @@
-# first_project
+# 🧶 Crochet Shop App (Flutter)
 
-A new Flutter project.
+A simple and clean e-commerce Flutter app for browsing and managing crochet products.  
+Built with a focus on UI, state management, and smooth user experience.
 
-## Getting Started
+---
 
-This project is a starting point for a Flutter application.
+## ✨ Features
 
-A few resources to get you started if this is your first Flutter project:
+- 🏠 Home screen with product listing  
+- 📄 Product details page  
+- 🛒 Cart management  
+- ❤️ Wishlist feature  
+- 👤 Profile screen  
+- 🌗 Light / Dark theme support  
+- 🔄 Navigation across screens  
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+---
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## 🛠️ Tech Stack
+
+- Flutter (UI)
+- Dart
+- Provider / Bloc (state management)
+- SharedPreferences (theme persistence - in progress)
+
+---
+
+## 🚀 Getting Started
+
+```bash
+git clone https://github.com/your-username/crochet_shop_app.git
+cd crochet_shop_app
+flutter pub get
+flutter run
