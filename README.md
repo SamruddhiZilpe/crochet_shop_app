@@ -11,12 +11,12 @@ Built with a focus on UI, state management, and smooth user experience.
 ![Home](assets/images/screenshots/home.png)
 
 ### 🛍️ Product Details
-![Product](assets/images/screenshots/product_details.png)
+![Product Details](assets/images/screenshots/product_details.png)
 
-### 🛍️ Product 
-![Product](assets/images/screenshots/product.png) 
+### 🛍️ Products
+![Products](assets/images/screenshots/products.png)
 
-### 🛒 Cart Screen
+### 🛒 Cart
 ![Cart](assets/images/screenshots/cart.png)
 
 ### ❤️ Wishlist
@@ -25,20 +25,23 @@ Built with a focus on UI, state management, and smooth user experience.
 ### 👤 Profile
 ![Profile](assets/images/screenshots/profile.png)
 
-### 🌗 Dark Mode
-![Dark Mode](assets/images/screenshots/settings.png)
+### ⚙️ Settings
+![Settings](assets/images/screenshots/settings.png)
+
+### 💳 Checkout
+![Checkout](assets/images/screenshots/checkout.png)
 
 ---
 
 ## ✨ Features
 
-- 🏠 Home screen with product listing  
-- 📄 Product details page  
-- 🛒 Cart management  
-- ❤️ Wishlist feature  
-- 👤 Profile screen  
-- 🌗 Light / Dark theme support  
-- 🔄 Navigation across screens  
+- 🏠 Home screen with product listing
+- 📄 Product details page
+- 🛒 Cart management
+- ❤️ Wishlist feature
+- 👤 Profile screen
+- 🌗 Light / Dark theme support
+- 🔄 Navigation across screens
 
 ---
 
