@@ -1,6 +1,6 @@
-import 'package:first_project/features/profile/presentation/pages/settings_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:veemadeforyou/features/profile/presentation/pages/settings_screen.dart';
 
 import '../../../../shared/widgets/profile_menu_tile.dart';
 import '../../../auth/presentation/auth_screen.dart';

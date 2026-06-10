@@ -1,10 +1,10 @@
-import 'package:first_project/features/cart/presentation/pages/cart_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../shared/models/product_model.dart';
 import '../../../shared/widgets/product_card.dart';
 
+import '../../cart/presentation/pages/cart_page.dart';
 import '../../product/presentation/product_details_screen.dart';
 
 import '../../wishlist/bloc/wishlist_bloc.dart';
