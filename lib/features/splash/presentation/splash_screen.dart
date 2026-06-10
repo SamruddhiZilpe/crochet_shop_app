@@ -1,6 +1,6 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart' show SharedPreferences;
+import 'package:firebase_auth/firebase_auth.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../auth/presentation/auth_screen.dart';
 import '../../navigation/presentation/main_navigation_screen.dart';
@@ -17,13 +17,12 @@ class _SplashScreenState extends State<SplashScreen> {
   void initState() {
     super.initState();
 
-    Timer(const Duration(seconds: 2), () async {
-      final prefs = await SharedPreferences.getInstance();
-      final isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    Timer(const Duration(seconds: 2), () {
+      final user = FirebaseAuth.instance.currentUser;
 
       if (!mounted) return;
 
-      if (isLoggedIn) {
+      if (user != null) {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

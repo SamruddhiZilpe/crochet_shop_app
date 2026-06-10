@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:veemadeforyou/features/profile/presentation/pages/settings_screen.dart';
@@ -131,8 +132,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: Icons.logout,
               title: "Logout",
               onTap: () async {
-                final prefs = await SharedPreferences.getInstance();
-                await prefs.setBool('isLoggedIn', false);
+                await FirebaseAuth.instance.signOut();
 
                 Navigator.pushAndRemoveUntil(
                   context,

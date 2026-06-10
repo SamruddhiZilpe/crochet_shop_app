@@ -1,6 +1,7 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import '../../../shared/widgets/custom_button.dart';
+import '../../../shared/widgets/custom_dialog.dart';
 import '../../navigation/presentation/main_navigation_screen.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -85,16 +86,62 @@ class _AuthScreenState extends State<AuthScreen> {
                 width: size.width * 0.8,
                 height: size.height * 0.06,
                 onPressed: () async {
-                  final prefs = await SharedPreferences.getInstance();
-                  await prefs.setBool('isLoggedIn', true);
+                  try {
+                    if (isLogin) {
+                      await FirebaseAuth.instance.signInWithEmailAndPassword(
+                        email: emailController.text.trim(),
+                        password: passwordController.text.trim(),
+                      );
+                    } else {
+                      await FirebaseAuth.instance.createUserWithEmailAndPassword(
+                        email: emailController.text.trim(),
+                        password: passwordController.text.trim(),
+                      );
+                    }
 
-                  Navigator.pushAndRemoveUntil(
-                    context,
-                    MaterialPageRoute(
-                      builder: (_) => const MainNavigationScreen(),
-                    ),
-                        (route) => false,
-                  );
+                    Navigator.pushAndRemoveUntil(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) => const MainNavigationScreen(),
+                      ),
+                          (route) => false,
+                    );
+                  } on FirebaseAuthException catch (e) {
+                    String message = "Authentication failed";
+
+                    if (e.code == 'invalid-credential') {
+                      message =
+                      "No account found with this email.\nPlease create an account first.";
+
+                      await CustomDialog.show(
+                        context: context,
+                        title: "Account Not Found",
+                        message: message,
+                        buttonText: "Sign Up",
+                        onPressed: () {
+                          setState(() {
+                            isLogin = false;
+                          });
+                        },
+                      );
+
+                      return;
+                    }
+
+                    if (e.code == 'email-already-in-use') {
+                      message = "This email is already registered.";
+                    }
+
+                    if (e.code == 'weak-password') {
+                      message = "Password must be at least 6 characters.";
+                    }
+
+                    await CustomDialog.show(
+                      context: context,
+                      title: "Authentication Error",
+                      message: message,
+                    );
+                  }
                 },
               ),
 
@@ -112,7 +159,7 @@ class _AuthScreenState extends State<AuthScreen> {
                       ? "Don't have an account? Sign Up"
                       : "Already have an account? Login",
                   style: TextStyle(
-                    color: Theme.of(context).colorScheme.onBackground,
+                    color: Theme.of(context).colorScheme.onSurface,
                   ),
                 ),
               ),
