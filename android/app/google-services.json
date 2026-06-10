@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "662617742303",
+    "project_id": "veemadeforyou-a4946",
+    "storage_bucket": "veemadeforyou-a4946.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:662617742303:android:6527849958e3ee2247826a",
+        "android_client_info": {
+          "package_name": "com.veemadeforyou.app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDfQ4Cq59p81hU8cv1xkudjMve9LFRv8H4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

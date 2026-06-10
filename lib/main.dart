@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +16,15 @@ import 'features/wishlist/data/repositories/wishlist_repository_impl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'features/wishlist/domain/entities/wishlist_item.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
+
 
   await Hive.initFlutter();
 
