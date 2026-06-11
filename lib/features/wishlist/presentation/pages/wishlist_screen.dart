@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../product/data/product_repository.dart';
+import '../../../product/presentation/product_details_screen.dart';
 import '../../bloc/wishlist_bloc.dart';
 import '../../bloc/wishlist_event.dart';
 import '../../bloc/wishlist_state.dart';
@@ -54,19 +56,35 @@ class _WishlistScreenState extends State<WishlistScreen> {
                 color: theme.cardColor,
                 margin: const EdgeInsets.only(bottom: 12),
                 child: ListTile(
+                  onTap: () async {
+                    try {
+                      final product = await ProductRepository().getProductById(
+                        item.id,
+                      );
+
+                      if (!context.mounted || product == null) return;
+
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (_) =>
+                              ProductDetailsScreen(product: product),
+                        ),
+                      );
+                    } catch (e) {
+                      debugPrint(e.toString());
+                    }
+                  },
                   leading: ClipRRect(
                     borderRadius: BorderRadius.circular(8),
-                    child: Image.asset(
+                    child: Image.network(
                       item.image,
                       width: 60,
                       height: 60,
                       fit: BoxFit.cover,
                     ),
                   ),
-                  title: Text(
-                    item.name,
-                    style: theme.textTheme.titleMedium,
-                  ),
+                  title: Text(item.name, style: theme.textTheme.titleMedium),
                   subtitle: Text(
                     "₹${item.price}",
                     style: TextStyle(

@@ -11,7 +11,7 @@ class AddWishlistItem extends WishlistEvent {
 }
 
 class RemoveWishlistItem extends WishlistEvent {
-  final String id;
+  final String productId;
 
-  RemoveWishlistItem(this.id);
+  RemoveWishlistItem(this.productId);
 }

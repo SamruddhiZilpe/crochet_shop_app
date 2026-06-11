@@ -1,8 +1,8 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:veemadeforyou/features/profile/presentation/pages/settings_screen.dart';
 
+import '../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../shared/widgets/profile_menu_tile.dart';
 import '../../../auth/presentation/auth_screen.dart';
 import '../../../order/presentation/pages/orders_screen.dart';
@@ -132,7 +132,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
               icon: Icons.logout,
               title: "Logout",
               onTap: () async {
+                final shouldLogout = await ConfirmDialog.show(
+                  context: context,
+                  title: "Logout",
+                  message: "Are you sure you want to logout?",
+                  confirmText: "Logout",
+                  icon: Icons.logout,
+                );
+
+                if (!shouldLogout) return;
+
                 await FirebaseAuth.instance.signOut();
+
+                if (!mounted) return;
 
                 Navigator.pushAndRemoveUntil(
                   context,

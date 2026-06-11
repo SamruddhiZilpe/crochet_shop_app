@@ -12,8 +12,7 @@ class MainNavigationScreen extends StatefulWidget {
   const MainNavigationScreen({super.key});
 
   @override
-  State<MainNavigationScreen> createState() =>
-      _MainNavigationScreenState();
+  State<MainNavigationScreen> createState() => _MainNavigationScreenState();
 }
 
 class _MainNavigationScreenState extends State<MainNavigationScreen> {
@@ -21,7 +20,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
 
   final List<Widget> _screens = [
     HomeScreen(),
-    const MenuTab(products: []),
+    const MenuTab(),
     const CartPage(),
     const ProfileScreen(),
   ];
@@ -32,10 +31,7 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
     return Scaffold(
       backgroundColor: theme.scaffoldBackgroundColor,
 
-      body: IndexedStack(
-        index: _selectedIndex,
-        children: _screens,
-      ),
+      body: IndexedStack(index: _selectedIndex, children: _screens),
 
       bottomNavigationBar: BottomNavigationBar(
         currentIndex: _selectedIndex,
@@ -52,15 +48,9 @@ class _MainNavigationScreenState extends State<MainNavigationScreen> {
         },
 
         items: [
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: "Home",
-          ),
+          const BottomNavigationBarItem(icon: Icon(Icons.home), label: "Home"),
 
-          const BottomNavigationBarItem(
-            icon: Icon(Icons.menu),
-            label: "Menu",
-          ),
+          const BottomNavigationBarItem(icon: Icon(Icons.menu), label: "Menu"),
 
           BottomNavigationBarItem(
             icon: BlocBuilder<CartBloc, CartState>(

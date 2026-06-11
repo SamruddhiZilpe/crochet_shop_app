@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 
-class CustomDialog {
-  static Future<void> show({
+class ConfirmDialog {
+  static Future<bool> show({
     required BuildContext context,
     required String title,
     required String message,
-    String buttonText = "OK",
-    VoidCallback? onPressed,
-    IconData icon = Icons.info_outline,
-  }) {
+    String confirmText = "Confirm",
+    String cancelText = "Cancel",
+    IconData icon = Icons.help_outline,
+  }) async {
     final size = MediaQuery.of(context).size;
 
-    return showDialog(
+    final result = await showDialog<bool>(
       context: context,
       builder: (context) {
         return AlertDialog(
@@ -54,24 +54,39 @@ class CustomDialog {
                   ),
                 ),
                 SizedBox(height: size.height * 0.025),
-                SizedBox(
-                  width: double.infinity,
-                  height: size.height * 0.055,
-                  child: ElevatedButton(
-                    onPressed: () {
-                      Navigator.pop(context);
 
-                      if (onPressed != null) {
-                        onPressed();
-                      }
-                    },
-                    child: Text(
-                      buttonText,
-                      style: TextStyle(
-                        fontSize: size.width * 0.04,
+                Row(
+                  children: [
+                    Expanded(
+                      child: OutlinedButton(
+                        onPressed: () {
+                          Navigator.pop(context, false);
+                        },
+                        child: Text(
+                          cancelText,
+                          style: TextStyle(
+                            fontSize: size.width * 0.04,
+                          ),
+                        ),
                       ),
                     ),
-                  ),
+
+                    SizedBox(width: size.width * 0.03),
+
+                    Expanded(
+                      child: ElevatedButton(
+                        onPressed: () {
+                          Navigator.pop(context, true);
+                        },
+                        child: Text(
+                          confirmText,
+                          style: TextStyle(
+                            fontSize: size.width * 0.04,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ],
             ),
@@ -79,5 +94,7 @@ class CustomDialog {
         );
       },
     );
+
+    return result ?? false;
   }
 }

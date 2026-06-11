@@ -31,9 +31,7 @@ class ProductCard extends StatelessWidget {
           borderRadius: BorderRadius.circular(18),
           boxShadow: [
             BoxShadow(
-              color: isDark
-                  ? Colors.black54
-                  : Colors.black12,
+              color: isDark ? Colors.black54 : Colors.black12,
               blurRadius: 8,
               spreadRadius: 2,
             ),
@@ -49,10 +47,38 @@ class ProductCard extends StatelessWidget {
                   topLeft: Radius.circular(18),
                   topRight: Radius.circular(18),
                 ),
-                child: Image.asset(
+                child: Image.network(
                   image,
                   width: double.infinity,
                   fit: BoxFit.cover,
+                  loadingBuilder:
+                      (
+                        BuildContext context,
+                        Widget child,
+                        ImageChunkEvent? loadingProgress,
+                      ) {
+                        if (loadingProgress == null) {
+                          return child;
+                        }
+
+                        return const Center(
+                          child: SizedBox(
+                            width: 24,
+                            height: 24,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          ),
+                        );
+                      },
+                  errorBuilder:
+                      (
+                        BuildContext context,
+                        Object error,
+                        StackTrace? stackTrace,
+                      ) {
+                        return const Center(
+                          child: Icon(Icons.image_not_supported),
+                        );
+                      },
                 ),
               ),
             ),
@@ -78,9 +104,7 @@ class ProductCard extends StatelessWidget {
 
                       IconButton(
                         icon: Icon(
-                          isFavorite
-                              ? Icons.favorite
-                              : Icons.favorite_border,
+                          isFavorite ? Icons.favorite : Icons.favorite_border,
                           color: theme.colorScheme.primary,
                         ),
                         onPressed: onFavoriteTap,

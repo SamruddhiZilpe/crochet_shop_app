@@ -1,5 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+
 import '../../../shared/widgets/custom_button.dart';
 import '../../../shared/widgets/custom_dialog.dart';
 import '../../navigation/presentation/main_navigation_screen.dart';
@@ -18,19 +19,112 @@ class _AuthScreenState extends State<AuthScreen> {
   final passwordController = TextEditingController();
 
   @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
+  Future<void> forgotPassword() async {
+    if (emailController.text.trim().isEmpty) {
+      await CustomDialog.show(
+        context: context,
+        title: "Email Required",
+        message: "Please enter your email first.",
+      );
+      return;
+    }
+
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(
+        email: emailController.text.trim(),
+      );
+
+      await CustomDialog.show(
+        context: context,
+        title: "Reset Email Sent",
+        message: "A password reset link has been sent to your email address.",
+      );
+    } on FirebaseAuthException catch (e) {
+      await CustomDialog.show(
+        context: context,
+        title: "Error",
+        message: e.message ?? "Something went wrong.",
+      );
+    }
+  }
+
+  Future<void> authenticate() async {
+    try {
+      if (isLogin) {
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+      } else {
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
+          email: emailController.text.trim(),
+          password: passwordController.text.trim(),
+        );
+      }
+
+      if (!mounted) return;
+
+      Navigator.pushAndRemoveUntil(
+        context,
+        MaterialPageRoute(builder: (_) => const MainNavigationScreen()),
+        (route) => false,
+      );
+    } on FirebaseAuthException catch (e) {
+      String message = "Authentication failed";
+
+      if (e.code == 'invalid-credential') {
+        message =
+            "No account found with this email.\nPlease create an account first.";
+
+        await CustomDialog.show(
+          context: context,
+          title: "Account Not Found",
+          message: message,
+          buttonText: "Sign Up",
+          onPressed: () {
+            setState(() {
+              isLogin = false;
+            });
+          },
+        );
+
+        return;
+      }
+
+      if (e.code == 'email-already-in-use') {
+        message = "This email is already registered.";
+      }
+
+      if (e.code == 'weak-password') {
+        message = "Password must be at least 6 characters.";
+      }
+
+      await CustomDialog.show(
+        context: context,
+        title: "Authentication Error",
+        message: message,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
     final size = MediaQuery.of(context).size;
+
     return Scaffold(
       backgroundColor: Theme.of(context).scaffoldBackgroundColor,
-
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-
-              // TITLE
               Text(
                 isLogin ? "Login" : "Sign Up",
                 style: Theme.of(context).textTheme.headlineMedium?.copyWith(
@@ -40,7 +134,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
               const SizedBox(height: 30),
 
-              // EMAIL
               TextField(
                 controller: emailController,
                 style: TextStyle(
@@ -59,7 +152,6 @@ class _AuthScreenState extends State<AuthScreen> {
 
               const SizedBox(height: 15),
 
-              // PASSWORD
               TextField(
                 controller: passwordController,
                 obscureText: true,
@@ -77,77 +169,27 @@ class _AuthScreenState extends State<AuthScreen> {
                 ),
               ),
 
-              const SizedBox(height: 25),
+              if (isLogin)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: TextButton(
+                    onPressed: forgotPassword,
+                    child: const Text("Forgot Password?"),
+                  ),
+                ),
 
-              // BUTTON
+              const SizedBox(height: 15),
+
               CustomButton(
                 text: isLogin ? "Login" : "Create Account",
                 backgroundColor: Theme.of(context).colorScheme.primary,
                 width: size.width * 0.8,
                 height: size.height * 0.06,
-                onPressed: () async {
-                  try {
-                    if (isLogin) {
-                      await FirebaseAuth.instance.signInWithEmailAndPassword(
-                        email: emailController.text.trim(),
-                        password: passwordController.text.trim(),
-                      );
-                    } else {
-                      await FirebaseAuth.instance.createUserWithEmailAndPassword(
-                        email: emailController.text.trim(),
-                        password: passwordController.text.trim(),
-                      );
-                    }
-
-                    Navigator.pushAndRemoveUntil(
-                      context,
-                      MaterialPageRoute(
-                        builder: (_) => const MainNavigationScreen(),
-                      ),
-                          (route) => false,
-                    );
-                  } on FirebaseAuthException catch (e) {
-                    String message = "Authentication failed";
-
-                    if (e.code == 'invalid-credential') {
-                      message =
-                      "No account found with this email.\nPlease create an account first.";
-
-                      await CustomDialog.show(
-                        context: context,
-                        title: "Account Not Found",
-                        message: message,
-                        buttonText: "Sign Up",
-                        onPressed: () {
-                          setState(() {
-                            isLogin = false;
-                          });
-                        },
-                      );
-
-                      return;
-                    }
-
-                    if (e.code == 'email-already-in-use') {
-                      message = "This email is already registered.";
-                    }
-
-                    if (e.code == 'weak-password') {
-                      message = "Password must be at least 6 characters.";
-                    }
-
-                    await CustomDialog.show(
-                      context: context,
-                      title: "Authentication Error",
-                      message: message,
-                    );
-                  }
-                },
+                onPressed: authenticate,
               ),
 
               const SizedBox(height: 15),
 
-              // SWITCH LOGIN/SIGNUP
               TextButton(
                 onPressed: () {
                   setState(() {

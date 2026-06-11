@@ -20,6 +20,7 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     emit(
       state.copyWith(
         items: repository.getWishlistItems(),
+        lastAction: null,
       ),
     );
   }
@@ -33,6 +34,7 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
     emit(
       state.copyWith(
         items: repository.getWishlistItems(),
+        lastAction: "added",
       ),
     );
   }
@@ -41,12 +43,12 @@ class WishlistBloc extends Bloc<WishlistEvent, WishlistState> {
       RemoveWishlistItem event,
       Emitter<WishlistState> emit,
       ) {
-    repository.removeFromWishlist(event.id);
+    repository.removeFromWishlist(event.productId);
 
     emit(
       state.copyWith(
         items: repository.getWishlistItems(),
+        lastAction: "removed",
       ),
     );
-  }
-}
+  }}
