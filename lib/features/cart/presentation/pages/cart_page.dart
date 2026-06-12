@@ -45,16 +45,26 @@ class CartPage extends StatelessWidget {
                         padding: const EdgeInsets.all(12),
                         child: Row(
                           children: [
-                            Image.network(item.image, height: 60, width: 60),
+                            Image.network(
+                              item.image,
+                              height: 60,
+                              width: 60,
+                              fit: BoxFit.cover,
+                              errorBuilder: (_, __, ___) =>
+                                  const Icon(Icons.image_not_supported),
+                            ),
 
                             const SizedBox(width: 12),
 
+                            /// LEFT SIDE (TEXT)
                             Expanded(
                               child: Column(
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
                                     item.name,
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style: theme.textTheme.bodyMedium?.copyWith(
                                       fontWeight: FontWeight.bold,
                                     ),
@@ -67,40 +77,52 @@ class CartPage extends StatelessWidget {
                               ),
                             ),
 
-                            Row(
-                              children: [
-                                IconButton(
-                                  icon: const Icon(Icons.remove),
-                                  onPressed: () {
-                                    final newQty = item.quantity - 1;
+                            /// RIGHT SIDE (FIXED WIDTH CONTROLS)
+                            Container(
+                              width: 110,
+                              alignment: Alignment.centerRight,
+                              child: Row(
+                                mainAxisAlignment: MainAxisAlignment.end,
+                                children: [
+                                  IconButton(
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                    icon: const Icon(Icons.remove),
+                                    onPressed: () {
+                                      final newQty = item.quantity - 1;
 
-                                    if (newQty <= 0) {
+                                      if (newQty <= 0) {
+                                        context.read<CartBloc>().add(
+                                          RemoveItem(item.id),
+                                        );
+                                      } else {
+                                        context.read<CartBloc>().add(
+                                          UpdateQuantity(item.id, newQty),
+                                        );
+                                      }
+                                    },
+                                  ),
+
+                                  Text(
+                                    "${item.quantity}",
+                                    style: theme.textTheme.bodyMedium,
+                                  ),
+
+                                  IconButton(
+                                    padding: EdgeInsets.zero,
+                                    constraints: const BoxConstraints(),
+                                    icon: const Icon(Icons.add),
+                                    onPressed: () {
                                       context.read<CartBloc>().add(
-                                        RemoveItem(item.id),
+                                        UpdateQuantity(
+                                          item.id,
+                                          item.quantity + 1,
+                                        ),
                                       );
-                                    } else {
-                                      context.read<CartBloc>().add(
-                                        UpdateQuantity(item.id, newQty),
-                                      );
-                                    }
-                                  },
-                                ),
-                                Text(
-                                  "${item.quantity}",
-                                  style: theme.textTheme.bodyMedium,
-                                ),
-                                IconButton(
-                                  icon: const Icon(Icons.add),
-                                  onPressed: () {
-                                    context.read<CartBloc>().add(
-                                      UpdateQuantity(
-                                        item.id,
-                                        item.quantity + 1,
-                                      ),
-                                    );
-                                  },
-                                ),
-                              ],
+                                    },
+                                  ),
+                                ],
+                              ),
                             ),
                           ],
                         ),

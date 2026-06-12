@@ -4,7 +4,6 @@ part 'cart_item.g.dart';
 
 @HiveType(typeId: 2)
 class CartItem {
-
   @HiveField(0)
   final String id;
 

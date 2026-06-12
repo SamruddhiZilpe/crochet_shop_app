@@ -29,9 +29,7 @@ class CheckoutPage extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        iconTheme: IconThemeData(
-          color: theme.iconTheme.color,
-        ),
+        iconTheme: IconThemeData(color: theme.iconTheme.color),
       ),
 
       body: BlocBuilder<CartBloc, CartState>(
@@ -62,11 +60,14 @@ class CheckoutPage extends StatelessWidget {
                           children: [
                             ClipRRect(
                               borderRadius: BorderRadius.circular(12),
-                              child: Image.asset(
+                              child: Image.network(
                                 item.image,
-                                height: 70,
-                                width: 70,
+                                height: 60,
+                                width: 60,
                                 fit: BoxFit.cover,
+                                errorBuilder: (context, error, stackTrace) {
+                                  return const Icon(Icons.image_not_supported);
+                                },
                               ),
                             ),
 
@@ -128,9 +129,7 @@ class CheckoutPage extends StatelessWidget {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: isDark
-                          ? Colors.black54
-                          : Colors.black12,
+                      color: isDark ? Colors.black54 : Colors.black12,
                       blurRadius: 10,
                       spreadRadius: 2,
                     ),
@@ -144,10 +143,7 @@ class CheckoutPage extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          "Total",
-                          style: theme.textTheme.titleMedium,
-                        ),
+                        Text("Total", style: theme.textTheme.titleMedium),
 
                         Text(
                           "₹${state.totalPrice.toStringAsFixed(2)}",

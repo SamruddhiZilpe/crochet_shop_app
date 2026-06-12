@@ -107,7 +107,7 @@ class _MenuTabState extends State<MenuTab> {
           child: isLoading
               ? const Center(child: CircularProgressIndicator())
               : Padding(
-                  padding: const EdgeInsets.all(12),
+                  padding: const EdgeInsets.all(10),
                   child: filteredProducts.isEmpty
                       ? Center(
                           child: Text(
@@ -151,64 +151,47 @@ class _MenuTabState extends State<MenuTab> {
                                   ],
                                 ),
                                 child: Padding(
-                                  padding: const EdgeInsets.all(10),
+                                  padding: const EdgeInsets.all(7),
                                   child: Column(
-                                    mainAxisAlignment: MainAxisAlignment.start,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
-                                      product.image.isNotEmpty
-                                          ? ClipRRect(
-                                              borderRadius:
-                                                  BorderRadius.circular(8),
-                                              child: Image.network(
-                                                product.image,
-                                                height: 55,
-                                                width: 55,
-                                                fit: BoxFit.cover,
-                                                loadingBuilder:
-                                                    (
-                                                      context,
-                                                      child,
-                                                      loadingProgress,
-                                                    ) {
-                                                      if (loadingProgress ==
-                                                          null) {
-                                                        return child;
-                                                      }
+                                      /// IMAGE
+                                      Center(
+                                        child: ClipRRect(
+                                          borderRadius: BorderRadius.circular(
+                                            10,
+                                          ),
+                                          child: Image.network(
+                                            product.image,
+                                            height: 90,
+                                            width: double.infinity,
+                                            fit: BoxFit.cover,
+                                            errorBuilder: (_, __, ___) =>
+                                                const Icon(
+                                                  Icons.image_not_supported,
+                                                  size: 40,
+                                                ),
+                                          ),
+                                        ),
+                                      ),
 
-                                                      return const SizedBox(
-                                                        height: 70,
-                                                        child: Center(
-                                                          child: SizedBox(
-                                                            width: 18,
-                                                            height: 18,
-                                                            child:
-                                                                CircularProgressIndicator(
-                                                                  strokeWidth:
-                                                                      2,
-                                                                ),
-                                                          ),
-                                                        ),
-                                                      );
-                                                    },
-                                                errorBuilder: (_, _, _) =>
-                                                    const Icon(
-                                                      Icons.image_not_supported,
-                                                    ),
-                                              ),
-                                            )
-                                          : const Icon(Icons.image, size: 40),
+                                      const SizedBox(height: 10),
 
+                                      /// NAME
                                       Text(
                                         product.name,
-                                        textAlign: TextAlign.center,
                                         maxLines: 2,
                                         overflow: TextOverflow.ellipsis,
                                         style: theme.textTheme.bodyMedium
                                             ?.copyWith(
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.w600,
                                             ),
                                       ),
 
+                                      const SizedBox(height: 4),
+
+                                      /// PRICE
                                       Text(
                                         "₹${product.price}",
                                         style: theme.textTheme.bodyMedium
@@ -218,29 +201,35 @@ class _MenuTabState extends State<MenuTab> {
                                             ),
                                       ),
 
-                                      CustomButton(
-                                        text: "Add",
-                                        backgroundColor:
-                                            theme.colorScheme.primary,
-                                        height: 35,
+                                      const Spacer(),
+
+                                      /// BUTTON pinned to bottom
+                                      SizedBox(
                                         width: double.infinity,
-                                        onPressed: () async {
-                                          context.read<CartBloc>().add(
-                                            AddItem(
-                                              item: CartItem(
-                                                id: product.id,
-                                                name: product.name,
-                                                price: product.price,
-                                                image: product.image,
-                                                quantity: 1,
+                                        height: 33,
+                                        child: CustomButton(
+                                          text: "Add",
+                                          backgroundColor:
+                                              theme.colorScheme.primary,
+                                          onPressed: () {
+                                            context.read<CartBloc>().add(
+                                              AddItem(
+                                                item: CartItem(
+                                                  id: product.id,
+                                                  name: product.name,
+                                                  price: product.price,
+                                                  image: product.image,
+                                                  quantity: 1,
+                                                ),
                                               ),
-                                            ),
-                                          );
-                                          CenterToast.show(
-                                            context,
-                                            "Added to Cart",
-                                          );
-                                        },
+                                            );
+
+                                            CenterToast.show(
+                                              context,
+                                              "Added to Cart",
+                                            );
+                                          },
+                                        ),
                                       ),
                                     ],
                                   ),

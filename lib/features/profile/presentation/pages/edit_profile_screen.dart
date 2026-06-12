@@ -5,11 +5,7 @@ class EditProfileScreen extends StatefulWidget {
   final String name;
   final String email;
 
-  const EditProfileScreen({
-    super.key,
-    required this.name,
-    required this.email,
-  });
+  const EditProfileScreen({super.key, required this.name, required this.email});
 
   @override
   State<EditProfileScreen> createState() => _EditProfileScreenState();
@@ -22,8 +18,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   void initState() {
     super.initState();
-
-    // Use values coming from ProfileScreen
     nameController = TextEditingController(text: widget.name);
     emailController = TextEditingController(text: widget.email);
   }
@@ -49,38 +43,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            const SizedBox(height: 20),
+            const SizedBox(height: 30),
 
-            const CircleAvatar(
-              radius: 50,
-              backgroundImage: NetworkImage(
-                "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQv7rFiM9IdHxVdI2UvYd3OCsPIzW9qm2U0PfCbG3SlJJqha_neA8Lp0Ww&s",
-              ),
-            ),
+            const CircleAvatar(radius: 50, child: Icon(Icons.person, size: 50)),
 
             const SizedBox(height: 30),
 
-            // NAME
             TextField(
               controller: nameController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "Name",
-                border: const OutlineInputBorder(),
-                filled: true,
-                fillColor: theme.cardColor,
+                border: OutlineInputBorder(),
               ),
             ),
 
             const SizedBox(height: 16),
 
-            // EMAIL
             TextField(
               controller: emailController,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 labelText: "Email",
-                border: const OutlineInputBorder(),
-                filled: true,
-                fillColor: theme.cardColor,
+                border: OutlineInputBorder(),
               ),
             ),
 
