@@ -21,10 +21,7 @@ import 'firebase_options.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  await Firebase.initializeApp(
-    options: DefaultFirebaseOptions.currentPlatform,
-  );
-
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
 
   await Hive.initFlutter();
 
@@ -35,15 +32,13 @@ Future<void> main() async {
   await Hive.openBox<CartItem>('cartBox');
   await Hive.openBox<OrderItem>('ordersBox');
   await Hive.openBox<WishlistItem>('wishlistBox');
+  await Hive.openBox('userProfileBox');
 
   final themeController = ThemeController();
   await themeController.loadTheme();
 
   runApp(
-    ChangeNotifierProvider.value(
-      value: themeController,
-      child: const MyApp(),
-    ),
+    ChangeNotifierProvider.value(value: themeController, child: const MyApp()),
   );
 }
 
@@ -55,15 +50,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => CartBloc(
-            CartRepositoryImpl(),
-          )..add(LoadCart()),
+          create: (_) => CartBloc(CartRepositoryImpl())..add(LoadCart()),
         ),
-        BlocProvider(
-          create: (_) => WishlistBloc(
-            WishlistRepositoryImpl(),
-          ),
-        ),
+        BlocProvider(create: (_) => WishlistBloc(WishlistRepositoryImpl())),
       ],
       child: const AppRoot(),
     );

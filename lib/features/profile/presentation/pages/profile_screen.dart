@@ -1,9 +1,9 @@
 import 'dart:io';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:hive/hive.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'package:veemadeforyou/features/profile/presentation/pages/settings_screen.dart';
@@ -24,6 +24,8 @@ class ProfileScreen extends StatefulWidget {
 class _ProfileScreenState extends State<ProfileScreen> {
   String name = "";
   String email = "";
+  String phone = ""; // Holds phone number
+  String address = ""; // Holds saved address
   String? imageUrl;
 
   final String uid = FirebaseAuth.instance.currentUser!.uid;
@@ -48,7 +50,17 @@ class _ProfileScreenState extends State<ProfileScreen> {
       setState(() {
         name = data?['name'] ?? "";
         email = data?['email'] ?? "";
+        phone = data?['phone'] ?? "";
+        address = data?['address'] ?? "";
         imageUrl = data?['imageUrl'];
+      });
+
+      // Synchronize data immediately with Hive for your CheckoutPage to grab instantly
+      var userBox = await Hive.openBox('userProfileBox');
+      await userBox.put('profile', {
+        'name': name,
+        'phone': phone,
+        'address': address,
       });
     } catch (e) {
       debugPrint("Load profile error: $e");
@@ -58,23 +70,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
   Future<void> pickAndUploadImage() async {
     try {
       final picker = ImagePicker();
-
       final pickedFile = await picker.pickImage(
         source: ImageSource.gallery,
         imageQuality: 80,
       );
 
       if (pickedFile == null) return;
-
       File file = File(pickedFile.path);
 
       final ref = FirebaseStorage.instance
           .ref()
           .child('profile_images')
           .child('$uid.jpg');
-
       await ref.putFile(file);
-
       final downloadUrl = await ref.getDownloadURL();
 
       await FirebaseFirestore.instance.collection('users').doc(uid).set({
@@ -98,6 +106,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       appBar: AppBar(
         title: const Text("Profile"),
         backgroundColor: theme.appBarTheme.backgroundColor,
+        elevation: 0,
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -118,7 +127,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ? Icon(Icons.person, size: 50, color: theme.primaryColor)
                       : null,
                 ),
-
                 GestureDetector(
                   onTap: pickAndUploadImage,
                   child: CircleAvatar(
@@ -133,23 +141,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
               ],
             ),
-
             const SizedBox(height: 10),
 
-            /// NAME
+            /// DISPLAY NAME & EMAIL
             Text(
               name,
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
               ),
             ),
-
-            /// EMAIL
             Text(email, style: theme.textTheme.bodyMedium),
-
             const SizedBox(height: 30),
 
-            /// EDIT PROFILE
+            /// EDIT PROFILE TILE
             ProfileMenuTile(
               icon: Icons.edit,
               title: "Edit Profile",
@@ -157,24 +161,42 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 final result = await Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (_) => EditProfileScreen(name: name, email: email),
+                    builder: (_) => EditProfileScreen(
+                      name: name,
+                      email: email,
+                      phone: phone,
+                      address: address,
+                    ),
                   ),
                 );
 
                 if (result == null) return;
 
                 try {
+                  // 1. Sync up with Cloud Firestore
                   await FirebaseFirestore.instance
                       .collection('users')
                       .doc(uid)
                       .set({
                         'name': result["name"],
                         'email': result["email"],
+                        'phone': result["phone"],
+                        'address': result["address"],
                       }, SetOptions(merge: true));
+
+                  // 2. Sync down to local Hive Box
+                  var userBox = Hive.box('userProfileBox');
+                  await userBox.put('profile', {
+                    'name': result["name"],
+                    'phone': result["phone"],
+                    'address': result["address"],
+                  });
 
                   setState(() {
                     name = result["name"];
                     email = result["email"];
+                    phone = result["phone"];
+                    address = result["address"];
                   });
                 } catch (e) {
                   debugPrint("Update profile error: $e");
@@ -230,7 +252,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 if (!shouldLogout) return;
 
                 await FirebaseAuth.instance.signOut();
-
                 if (!mounted) return;
 
                 Navigator.pushAndRemoveUntil(
