@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../shared/models/product_model.dart';
+import '../../../shared/widgets/centre_toast.dart';
 import '../../../shared/widgets/custom_button.dart';
 import '../../cart/domain/entities/cart_item.dart';
 import '../../cart/presentation/bloc/cart_bloc.dart';
@@ -10,10 +11,7 @@ import '../../cart/presentation/bloc/cart_event.dart';
 class ProductDetailsScreen extends StatelessWidget {
   final Product product;
 
-  const ProductDetailsScreen({
-    super.key,
-    required this.product,
-  });
+  const ProductDetailsScreen({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
@@ -25,10 +23,7 @@ class ProductDetailsScreen extends StatelessWidget {
 
       appBar: AppBar(
         backgroundColor: theme.appBarTheme.backgroundColor,
-        title: Text(
-          product.name,
-          style: theme.textTheme.titleMedium,
-        ),
+        title: Text(product.name, style: theme.textTheme.titleMedium),
         iconTheme: theme.iconTheme,
       ),
 
@@ -40,7 +35,7 @@ class ProductDetailsScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16),
               child: ClipRRect(
                 borderRadius: BorderRadius.circular(20),
-                child: Image.asset(
+                child: Image.network(
                   product.image,
                   height: 600,
                   width: double.infinity,
@@ -92,7 +87,7 @@ class ProductDetailsScreen extends StatelessWidget {
                     height: size.height * 0.06,
                     text: "Add to Cart",
                     backgroundColor: theme.colorScheme.primary,
-                    onPressed: () {
+                    onPressed: () async {
                       context.read<CartBloc>().add(
                         AddItem(
                           item: CartItem(
@@ -104,13 +99,7 @@ class ProductDetailsScreen extends StatelessWidget {
                           ),
                         ),
                       );
-
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        SnackBar(
-                          content: Text("${product.name} added 💗"),
-                          duration: const Duration(seconds: 1),
-                        ),
-                      );
+                      CenterToast.show(context, "Added to Cart");
                     },
                   ),
 

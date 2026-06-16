@@ -1,3 +1,5 @@
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -15,9 +17,19 @@ import 'features/wishlist/data/repositories/wishlist_repository_impl.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 
 import 'features/wishlist/domain/entities/wishlist_item.dart';
+import 'firebase_options.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await FirebaseMessaging.instance.requestPermission();
+  //
+  // await Future.delayed(const Duration(seconds: 2));
+  //
+  // String? token = await FirebaseMessaging.instance.getToken();
+  //
+  // print("FCM TOKEN: $token");
 
   await Hive.initFlutter();
 
@@ -28,15 +40,13 @@ Future<void> main() async {
   await Hive.openBox<CartItem>('cartBox');
   await Hive.openBox<OrderItem>('ordersBox');
   await Hive.openBox<WishlistItem>('wishlistBox');
+  await Hive.openBox('userProfileBox');
 
   final themeController = ThemeController();
   await themeController.loadTheme();
 
   runApp(
-    ChangeNotifierProvider.value(
-      value: themeController,
-      child: const MyApp(),
-    ),
+    ChangeNotifierProvider.value(value: themeController, child: const MyApp()),
   );
 }
 
@@ -48,15 +58,9 @@ class MyApp extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (_) => CartBloc(
-            CartRepositoryImpl(),
-          )..add(LoadCart()),
+          create: (_) => CartBloc(CartRepositoryImpl())..add(LoadCart()),
         ),
-        BlocProvider(
-          create: (_) => WishlistBloc(
-            WishlistRepositoryImpl(),
-          ),
-        ),
+        BlocProvider(create: (_) => WishlistBloc(WishlistRepositoryImpl())),
       ],
       child: const AppRoot(),
     );

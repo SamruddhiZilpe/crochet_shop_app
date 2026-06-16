@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../core/themes/theme_controller.dart';
+import '../../../../shared/widgets/custom_dialog.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -26,17 +27,17 @@ class _SettingsScreenState extends State<SettingsScreen> {
           const SizedBox(height: 20),
 
           /// NOTIFICATIONS
-          SwitchListTile(
-            activeColor: theme.colorScheme.primary,
-            title: const Text("Notifications"),
-            subtitle: const Text("Enable or disable notifications"),
-            value: notifications,
-            onChanged: (value) {
-              setState(() {
-                notifications = value;
-              });
-            },
-          ),
+          // SwitchListTile(
+          //   activeColor: theme.colorScheme.primary,
+          //   title: const Text("Notifications"),
+          //   subtitle: const Text("Enable or disable notifications"),
+          //   value: notifications,
+          //   onChanged: (value) {
+          //     setState(() {
+          //       notifications = value;
+          //     });
+          //   },
+          // ),
 
           /// DARK MODE
           SwitchListTile(
@@ -53,10 +54,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           /// ABOUT
           ListTile(
-            leading: Icon(
-              Icons.info,
-              color: theme.colorScheme.primary,
-            ),
+            leading: Icon(Icons.info, color: theme.colorScheme.primary),
             title: const Text("About App"),
             onTap: () {
               showAboutDialog(
@@ -70,20 +68,20 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           /// HELP
           ListTile(
-            leading: Icon(
-              Icons.help,
-              color: theme.colorScheme.primary,
-            ),
+            leading: Icon(Icons.help, color: theme.colorScheme.primary),
             title: const Text("Help & Support"),
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(content: Text("Help coming soon")),
+            onTap: () async {
+              await CustomDialog.show(
+                context: context,
+                title: "Help",
+                message: "Help Coming Soon.",
+                buttonText: "Okay",
+                icon: Icons.help,
               );
             },
           ),
 
           const Spacer(),
-
         ],
       ),
     );

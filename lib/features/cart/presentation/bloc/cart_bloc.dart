@@ -17,10 +17,7 @@ class CartBloc extends Bloc<CartEvent, CartState> {
   void _onLoadCart(LoadCart event, Emitter<CartState> emit) {
     final items = repository.getCartItems();
 
-    emit(state.copyWith(
-      items: items,
-      totalPrice: repository.getTotalPrice(),
-    ));
+    emit(state.copyWith(items: items, totalPrice: repository.getTotalPrice()));
   }
 
   void _onAddItem(AddItem event, Emitter<CartState> emit) {
@@ -28,10 +25,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     final updatedItems = repository.getCartItems();
 
-    emit(state.copyWith(
-      items: updatedItems,
-      totalPrice: repository.getTotalPrice(),
-    ));
+    emit(
+      state.copyWith(
+        items: updatedItems,
+        totalPrice: repository.getTotalPrice(),
+      ),
+    );
   }
 
   void _onRemoveItem(RemoveItem event, Emitter<CartState> emit) {
@@ -39,10 +38,12 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     final updatedItems = repository.getCartItems();
 
-    emit(state.copyWith(
-      items: updatedItems,
-      totalPrice: repository.getTotalPrice(),
-    ));
+    emit(
+      state.copyWith(
+        items: updatedItems,
+        totalPrice: repository.getTotalPrice(),
+      ),
+    );
   }
 
   void _onUpdateQuantity(UpdateQuantity event, Emitter<CartState> emit) {
@@ -50,9 +51,11 @@ class CartBloc extends Bloc<CartEvent, CartState> {
 
     final updatedItems = repository.getCartItems();
 
-    emit(state.copyWith(
-      items: updatedItems,
-      totalPrice: repository.getTotalPrice(),
-    ));
+    emit(
+      state.copyWith(
+        items: updatedItems,
+        totalPrice: repository.getTotalPrice(),
+      ),
+    );
   }
 }
