@@ -10,7 +10,7 @@ import 'package:veemadeforyou/features/profile/presentation/pages/settings_scree
 import '../../../../shared/widgets/confirm_dialog.dart';
 import '../../../../shared/widgets/profile_menu_tile.dart';
 import '../../../auth/presentation/auth_screen.dart';
-import '../../../order/presentation/pages/orders_screen.dart';
+import '../../../order/presentation/pages/orders_firestore_screen.dart';
 import '../../../wishlist/presentation/pages/wishlist_screen.dart';
 import 'edit_profile_screen.dart';
 
@@ -210,7 +210,9 @@ class _ProfileScreenState extends State<ProfileScreen> {
               onTap: () {
                 Navigator.push(
                   context,
-                  MaterialPageRoute(builder: (_) => const OrdersScreen()),
+                  MaterialPageRoute(
+                    builder: (_) => const OrdersFirestoreScreen(),
+                  ),
                 );
               },
             ),

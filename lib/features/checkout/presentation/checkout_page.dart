@@ -241,6 +241,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
 
       await FirebaseFirestore.instance.collection('orders').doc(orderId).set({
         'orderId': orderId,
+        'uid': FirebaseAuth.instance.currentUser?.uid,
         'paymentId': response.paymentId,
         'customerName': _nameController.text.trim(),
         'mobileNumber': _phoneController.text.trim(),
@@ -251,7 +252,7 @@ class _CheckoutPageState extends State<CheckoutPage> {
             )
             .toList(),
         'totalAmount': cartBloc.state.totalPrice,
-        'status': 'Paid - Processing Shipment',
+        'status': 'Pending',
         'createdAt': FieldValue.serverTimestamp(),
       });
 
